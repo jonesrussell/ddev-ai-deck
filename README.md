@@ -2,6 +2,11 @@
 
 Marp (Markdown) slides for discussing an **observable, measurable AI harness** with ddev maintainers. Source: [`deck.md`](deck.md).
 
+## Tracking (upstream)
+
+- **Discussion:** [ddev/ddev#8307 — Proposal: AI harness…](https://github.com/ddev/ddev/issues/8307)
+- **Prebuilt PDF:** [Latest release `deck.pdf`](https://github.com/jonesrussell/ddev-ai-deck/releases/latest/download/deck.pdf) (also on the [Releases](https://github.com/jonesrussell/ddev-ai-deck/releases) page).
+
 ## Prerequisites
 
 - Node.js 18+ (for `npx`), or install Marp CLI globally.
