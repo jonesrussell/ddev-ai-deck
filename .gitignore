@@ -1,0 +1,12 @@
+# Marp exports (regenerate with marp-cli)
+deck.pdf
+deck.html
+
+# Dependencies
+node_modules/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+*~

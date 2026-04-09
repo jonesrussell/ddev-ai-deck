@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 200" role="img" aria-labelledby="title desc">
+  <title id="title">Harness-first workflow loop</title>
+  <desc id="desc">Planning leads to code generation, verification, telemetry, and feedback in a cycle.</desc>
+  <defs>
+    <style>
+      .box { fill: #f4f4f5; stroke: #27272a; stroke-width: 2; rx: 8; }
+      .arrow { stroke: #3f3f46; stroke-width: 2.5; fill: none; marker-end: url(#arrowhead); }
+      .label { font-family: system-ui, sans-serif; font-size: 15px; fill: #18181b; font-weight: 600; }
+      .sub { font-family: system-ui, sans-serif; font-size: 11px; fill: #52525b; font-weight: 400; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#3f3f46" />
+    </marker>
+  </defs>
+  <!-- boxes -->
+  <rect class="box" x="10" y="50" width="150" height="100"/>
+  <rect class="box" x="200" y="50" width="150" height="100"/>
+  <rect class="box" x="390" y="50" width="150" height="100"/>
+  <rect class="box" x="580" y="50" width="150" height="100"/>
+  <rect class="box" x="770" y="50" width="140" height="100"/>
+  <!-- arrows -->
+  <path class="arrow" d="M 165 100 L 195 100"/>
+  <path class="arrow" d="M 355 100 L 385 100"/>
+  <path class="arrow" d="M 545 100 L 575 100"/>
+  <path class="arrow" d="M 735 100 L 765 100"/>
+  <path class="arrow" d="M 840 50 Q 840 20 730 20 L 85 20 Q 10 20 10 50"/>
+  <!-- labels -->
+  <text class="label" x="85" y="88" text-anchor="middle">Planning</text>
+  <text class="sub" x="85" y="112" text-anchor="middle">impact map</text>
+  <text class="label" x="275" y="88" text-anchor="middle">Generation</text>
+  <text class="sub" x="275" y="112" text-anchor="middle">scoped writes</text>
+  <text class="label" x="465" y="88" text-anchor="middle">Verification</text>
+  <text class="sub" x="465" y="112" text-anchor="middle">tests + lint</text>
+  <text class="label" x="655" y="88" text-anchor="middle">Telemetry</text>
+  <text class="sub" x="655" y="112" text-anchor="middle">shadow / canary</text>
+  <text class="label" x="840" y="88" text-anchor="middle">Feedback</text>
+  <text class="sub" x="840" y="112" text-anchor="middle">harness evolves</text>
+</svg>
