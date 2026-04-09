@@ -24,32 +24,33 @@ style: |
 
 # AI harness for **ddev**
 
-Observable, measurable AI-assisted contributions — without reinventing the wheel
+Observable, measurable AI-assisted contributions — **ddev already uses AI in dev and review**; this is about harnessing it **consistently**
 
 ---
 
 ## Agenda
 
-- Problem & goal — mixed tools, no provenance, drifting models.
+- Reality & goal — **AI is already in the loop** (dev + review); gaps are provenance, measurement, parity across tools.
+- **What’s already in ddev** — `AGENTS.md`, `make staticrequired`, CI — vs gaps.
 - **Harness-first** — plan → generate → verify → telemetry → feedback.
 - Options, building blocks, environments, **metrics**.
-- CI gates, variability, governance, **first deliverables**.
+- CI gates, variability, governance, **incremental deliverables**.
 - References & **maintainer CTA**.
 
 ---
 
 ## Why now
 
-- ddev is moving toward **AI-assisted development** alongside human review.
-- Contributors already use **Claude Code, Codex, Cursor**, and other tools — **no shared provenance**.
-- **Black-box models** drift day to day; identical prompts can yield different results.
-- We need **project standards, verification, and telemetry** that work for **any contributor**.
+- **DDEV already practices AI-assisted development and review** — agents and copilots draft code, docs, and review commentary; humans still merge with judgment.
+- Contributors and tools vary (**Claude Code, Codex, Cursor, Copilot**, etc.) — **no shared provenance** for what produced a given change.
+- **Black-box models** drift day to day; identical prompts can yield different results — hard to debug or compare runs.
+- The next step is not “turn on AI” but **standards, verification, and telemetry** that make that reality **consistent, observable, and measurable** for **every PR**.
 
 ---
 
 ## Goal
 
-Make AI-assisted contributions:
+ddev **already** ships AI-assisted changes; make that practice:
 
 - **Consistent** — same gates and artifacts for every PR.
 - **Observable** — unified telemetry across local, CI, staging, and shadow runs.
@@ -59,11 +60,38 @@ Automation and monitoring so model-driven changes stay **safe, reproducible, and
 
 ---
 
+## What’s already in ddev — **foundation**
+
+Reuse this **harness v0** — AI-assisted workflow is **already normalized** in-repo.
+
+- **[`AGENTS.md`](https://github.com/ddev/ddev/blob/main/AGENTS.md)** + **[Copilot instructions](https://github.com/ddev/ddev/blob/main/.github/copilot-instructions.md)** — playbook for dev **and** review assistance.
+- **[`CLAUDE.md`](https://github.com/ddev/ddev/blob/main/CLAUDE.md)** + **`.claude/`** — pre-commit `make staticrequired`; format hooks for Go/Markdown.
+- **`make staticrequired`** — golangci-lint, markdown, mkdocs, spelling.
+- **CI** — build, docs checks, integration tests (many workflows).
+- **PR template** + **[`.mcp.json`](https://github.com/ddev/ddev/blob/main/.mcp.json)** (`ddev-specs`).
+
+---
+
+## What’s already in ddev — **gaps**
+
+**Not there yet (this proposal):**
+
+- Machine-readable **agent fingerprint**
+- **Impact map** / plan-vs-diff gate
+- **Harness score** rollup
+- **Unified telemetry** across agent runs
+
+**Tooling parity:** docs and hooks skew **Claude**; **Cursor / Codex** are lighter — one harness should serve all.
+
+---
+
 ## Harness-first (high level)
 
 **Constrain and instrument** the workflow so agents can explore, while the **harness proves correctness**.
 
 Tight feedback loops: fast local checks, strict CI, shadow/canary signal, then feed results back into prompts and rules.
+
+**In ddev terms:** treat **`make staticrequired` + existing CI** as the verified core; add **provenance, planning artifacts, and scoring** around it — not a second quality system.
 
 ![w:900](./assets/harness-loop.svg)
 
@@ -107,7 +135,7 @@ Tight feedback loops: fast local checks, strict CI, shadow/canary signal, then f
 
 | Layer | Role |
 |-------|------|
-| **Local dev harness** | Fast, deterministic — pre-commit: generation checks + linters |
+| **Local dev harness** | Fast, deterministic — **today:** `make staticrequired` + hooks; optional: stricter agent-local gates |
 | **CI harness** | Gated PRs: impact map validation, static + unit/integration + structural |
 | **Staging shadow** | Representative workloads + telemetry |
 | **Canary / shadow production** | Feature flags / shadow traffic — non-user-impact validation |
@@ -132,20 +160,24 @@ Time series + **alert thresholds** on regressions.
 
 ---
 
-## CI: pre-merge vs post-merge
+## CI — **pre-merge**
 
-**Required before merge**
+**Already there:** `pr-check.yml` (title, labels) + workflows for **build, lint, docs, tests** — deep verification.
 
-- Valid **agent metadata** (see RFC / `AGENTS.md`).
-- **Repository impact map** validated (scanner + diff matcher).
-- Formatters + static linters.
-- Unit tests + structural layering tests.
-- Optional **harness score** (0–100) from checks — policy sets minimum later.
+**Optional adds** (maintainer buy-in):
 
-**After merge**
+- **Agent metadata** (schema in RFC / `AGENTS.md`)
+- **Impact map** check (scanner + diff match)
+- **Harness score** — rollup from *existing* checks; merge bar TBD
 
-- Integration in **staging shadow**.
-- **Canary** with telemetry gates; **auto-rollback** if thresholds fail.
+**Bar unchanged:** formatters, linters, unit/integration tests stay as today.
+
+---
+
+## CI — **post-merge**
+
+- **Staging shadow** — integration runs on merged changes.
+- **Canary** — telemetry gates; **auto-rollback** if thresholds fail.
 
 ---
 
@@ -162,10 +194,11 @@ We **don’t** need one vendor — we need **one harness** that works across the
 
 ## Governance & contributor policy
 
-- **PR template** — agent metadata, plan artifact, harness score (when enabled).
-- **Allowlist** — approved tool/model versions; CI can **block** unknown agents (policy TBD with maintainers).
-- **Reviewer checklist** — provenance, plan fidelity, shadow results.
-- **Docs** — `AGENTS.md` + short **harness playbook** (local checks, reading telemetry).
+- **Extend existing docs** — **[`AGENTS.md`](https://github.com/ddev/ddev/blob/main/AGENTS.md)** already exists; add sections for **optional metadata schema**, impact map, and how to read a **harness score**. Align with **[org `AGENTS.md`](https://github.com/ddev/.github/blob/main/AGENTS.md)** where relevant.
+- **`PULL_REQUEST_TEMPLATE.md`** — add optional blocks: agent/tool fingerprint, link to plan artifact, harness score (when CI emits it).
+- **Allowlist** — approved tool/model versions; CI **blocking** unapproved agents is **policy TBD** with maintainers.
+- **Reviewer checklist** — provenance, plan fidelity, shadow results (when rolled out).
+- **Short harness playbook** — “run `make staticrequired`”, interpret CI, where to file metadata — can live in `AGENTS.md` or docs.
 - **Humans without agents** — same verification path; metadata marks **manual** contribution.
 
 ---
@@ -173,22 +206,22 @@ We **don’t** need one vendor — we need **one harness** that works across the
 ## Low-effort starting steps
 
 1. **Issue** in ddev/ddev — “AI harness: proposal + checklist” — collect constraints & owners.
-2. **`AGENTS.md`** — minimal metadata schema + PR expectations.
-3. **Prototype CI job** — validate metadata + static checks + simple harness score.
-4. **Repo scanner** — emit impact map artifact per ticket/PR.
-5. **Two-week experiment** — noncritical area; measure the metrics above.
+2. **Extend `AGENTS.md` + PR template** — minimal **AGENT_METADATA** (or equivalent) + where to attach an impact map — **not** replacing the current playbook.
+3. **Prototype CI job** — optional check: metadata shape + roll up a **simple harness score** from existing lint/test outcomes.
+4. **Repo scanner** — emit impact map artifact per ticket/PR for human + bot review.
+5. **Two-week pilot** — noncritical area; measure the metrics above; tighten **Cursor/Codex** guidance parity if gaps hurt contributors.
 
-Reuse **community patterns** (references slide) instead of bespoke everything.
+Reuse **community patterns** (references slide) and **existing `make staticrequired` / workflows**.
 
 ---
 
 ## Deliverables (priority order)
 
 1. **Issue + RFC** — harness policy, metrics, rollout (this deck as starting body).
-2. **PR template + `AGENTS.md`** — metadata + planning artifacts enforced in review.
-3. **Minimal CI harness** — metadata validation, linters, harness score v0.
+2. **PR template + `AGENTS.md` extensions** — provenance + planning sections; **Copilot** already follows `AGENTS.md`.
+3. **CI incremental** — optional metadata validation + **harness score v0** (mostly aggregation over **existing** checks).
 4. **Repo scanner prototype** — impact maps for humans + tooling.
-5. **Shadow-run pipeline** — staging + telemetry for generated changes.
+5. **Shadow-run pipeline** — staging + telemetry (phase 2 if maintainers want lighter v1).
 
 ---
 
@@ -205,7 +238,7 @@ Reuse **community patterns** (references slide) instead of bespoke everything.
 
 ## Call to action
 
-**Open a maintainer thread:** RFC + tracking issue — align on scope (“metadata only” vs full shadow stack), owners, and **pilot** boundaries.
+**Open a maintainer thread:** RFC + tracking issue — align on scope (“metadata only” vs full shadow stack), owners, and **measurement / pilot** boundaries for the harness **on top of** current AI-assisted practice.
 
 Offer optional follow-ups: pasted **RFC body**, **PR template**, and **AGENT_METADATA** schema for GitHub.
 
@@ -214,5 +247,7 @@ Offer optional follow-ups: pasted **RFC body**, **PR template**, and **AGENT_MET
 ## Summary
 
 - **Harness-first** = provenance + structured plan + scoped generation + automated verification + telemetry + feedback into rules.
-- **Phase thoughtfully:** RFC + `AGENTS.md` + CI prototype + impact-map scanner → then shadow/canary when maintainers are ready.
-- **Presenter hint:** OSS can’t mandate one IDE — **CI and artifacts** are the shared contract.
+- **AI-assisted dev and review are already normal** in ddev; the harness makes that **legible** (who/what/when) and **governable** without slowing humans down.
+- **ddev already has** verification muscle (`staticrequired`, rich CI); the win is **metadata, planning artifacts, measurability, and cross-tool parity** — not a parallel QA stack.
+- **Phase thoughtfully:** RFC → extend **existing** `AGENTS.md` + PR template → optional CI score + scanner → shadow/canary when ready.
+- **Presenter hint:** OSS can’t mandate one IDE — **CI and artifacts** are the shared contract; reconcile **Go version** and other agent-facing hints in `AGENTS.md` so generated PRs don’t drift.
