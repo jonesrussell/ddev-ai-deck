@@ -192,26 +192,36 @@ We **don’t** need one vendor — we need **one harness** that works across the
 
 ---
 
-## Governance & contributor policy
+## Governance — **docs & template**
 
-- **Extend existing docs** — **[`AGENTS.md`](https://github.com/ddev/ddev/blob/main/AGENTS.md)** already exists; add sections for **optional metadata schema**, impact map, and how to read a **harness score**. Align with **[org `AGENTS.md`](https://github.com/ddev/.github/blob/main/AGENTS.md)** where relevant.
-- **`PULL_REQUEST_TEMPLATE.md`** — add optional blocks: agent/tool fingerprint, link to plan artifact, harness score (when CI emits it).
-- **Allowlist** — approved tool/model versions; CI **blocking** unapproved agents is **policy TBD** with maintainers.
-- **Reviewer checklist** — provenance, plan fidelity, shadow results (when rolled out).
-- **Short harness playbook** — “run `make staticrequired`”, interpret CI, where to file metadata — can live in `AGENTS.md` or docs.
-- **Humans without agents** — same verification path; metadata marks **manual** contribution.
+- **[`AGENTS.md`](https://github.com/ddev/ddev/blob/main/AGENTS.md)** — add: metadata schema, impact map, how to read **harness score**. Align with **[org policy](https://github.com/ddev/.github/blob/main/AGENTS.md)** where useful.
+- **PR template** — optional: tool fingerprint, plan artifact link, score (when CI prints it).
 
 ---
 
-## Low-effort starting steps
+## Governance — **review & everyone else**
 
-1. **Issue** in ddev/ddev — “AI harness: proposal + checklist” — collect constraints & owners.
-2. **Extend `AGENTS.md` + PR template** — minimal **AGENT_METADATA** (or equivalent) + where to attach an impact map — **not** replacing the current playbook.
-3. **Prototype CI job** — optional check: metadata shape + roll up a **simple harness score** from existing lint/test outcomes.
-4. **Repo scanner** — emit impact map artifact per ticket/PR for human + bot review.
-5. **Two-week pilot** — noncritical area; measure the metrics above; tighten **Cursor/Codex** guidance parity if gaps hurt contributors.
+- **Allowlist** — approved tools/models; CI **blocking** strays = **TBD** with maintainers.
+- **Reviewers** — check provenance, plan vs diff, shadow (when on).
+- **Playbook** — `make staticrequired`, read CI, where metadata lives (`AGENTS.md` or docs).
+- **Non-agent PRs** — same CI; mark **manual** in metadata.
 
-Reuse **community patterns** (references slide) and **existing `make staticrequired` / workflows**.
+---
+
+## Low-effort steps — **1–3**
+
+1. **Issue** — “AI harness: proposal + checklist”; gather owners + constraints.
+2. **Extend** `AGENTS.md` + PR template — `AGENT_METADATA` (or equiv.) + impact map hook; keep current playbook.
+3. **CI prototype** — optional metadata validation + **simple score** from existing lint/test jobs.
+
+---
+
+## Low-effort steps — **4–5**
+
+4. **Repo scanner** — impact map artifact per PR/issue (human + bot).
+5. **Pilot** — ~2 weeks, safe area; track metrics; fix **Cursor/Codex** doc gaps if needed.
+
+Lean on **community harness patterns** (see References) + **`make staticrequired`**.
 
 ---
 
